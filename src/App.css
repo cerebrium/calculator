@@ -1,0 +1,8 @@
+.formulizer {
+  padding: 16px;
+}
+
+.syntaxTree {
+  max-height: 300px;
+  overflow-y: auto;
+}
