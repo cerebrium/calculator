@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { TreeParser } from './treeContext/context-provider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TreeParser>
+      <App />
+    </TreeParser>
   </React.StrictMode>,
   document.getElementById('root')
 );

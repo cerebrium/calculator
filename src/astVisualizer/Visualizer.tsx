@@ -1,10 +1,12 @@
 import React from 'react'
-import * as S from './components.styled'
+import { OutlinedContent } from './components'
+import * as S from './styledComponents.styled'
+
 
 const Visualizer: React.FC = () => {
     return (
         <S.Container>
-
+            <OutlinedContent />
         </S.Container>
     )
 }

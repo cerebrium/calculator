@@ -2,26 +2,29 @@ import { useState } from 'react';
 import './App.css';
 import * as Parser from './parser/formula-parser';
 import Visualizer from './astVisualizer/Visualizer';
+import { useTreeProvider } from './treeContext/context-provider';
 const parse = Parser.parse;
 
 const App: React.FC = () =>{
-  let [formula, formulaChange] = useState('($b + SQRT (SQR($b) - 4 * $a)) / (2 * $a)');
+  let [formula, setFormula] = useState('($b + SQRT (SQR($b) - 4 * $a)) / (2 * $a)');
   let [syntaxTree, syntaxTreeChange] = useState('');
   let [syntaxTreeJson, syntaxTreeJsonChange] = useState<any>(null);
   let [displayVisualizer, setDisplayVisualizer] = useState(false);
 
+  const [trigger, {subSections}] = useTreeProvider();
+
 
   const updateAst = () => {
-    console.log('creating ast view...');
     const newSyntaxTree = parse(formula);
     syntaxTreeChange(newSyntaxTree);
 
-    console.log('The ast is: ', syntaxTree);
-    syntaxTreeJsonChange(JSON.stringify(newSyntaxTree, null, 2));
+    const syntaxTree = JSON.stringify(newSyntaxTree, null, 2)
+    syntaxTreeJsonChange(syntaxTree);
+    trigger(syntaxTree)
   };
 
   const convertAstToFormula = () => {     
-
+    setDisplayVisualizer(() => !displayVisualizer);
   };
 
   return (
@@ -33,7 +36,7 @@ const App: React.FC = () =>{
           cols={100} 
           rows={8} 
           value={formula} 
-          onChange={(event) => formulaChange(event.target.value)}/> <br/>
+          onChange={(event) => setFormula(event.target.value)}/> <br/>
       </p>
       <p><button onClick={updateAst}>Parse and update AST View</button></p>
       <h3>Syntax tree</h3>
