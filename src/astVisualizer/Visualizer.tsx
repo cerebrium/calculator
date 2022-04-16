@@ -21,35 +21,44 @@ const Visualizer: React.FC = () => {
   const wrappedElements = useMemo(() => {
     if (tree) {
       const traverse = (tree: any) => {
-        console.log("tree: ", tree);
         let final_array_of_elements: any = [];
 
         const _iterate = (tree: any, element: any): any => {
           let _element = element;
 
-          // Name is the actual text
-          if (tree["name"]) {
-            // console.log("NAME:", tree["name"], tree);
-            console.log(
-              `---------------------------- printing name ${tree["name"]} ----------------------------`
-            );
+          /*
+
+            Name is where the text wanted is found
+            Due to the placement of the recursive function, this should only be done for variables
+
+          */
+          if (tree["name"] && tree["type"] === "VARIABLE") {
 
             _element = (
               <NestedComponent text={tree["name"]} children={element} />
             );
           }
 
+          /*
+
+            If the type is number, we want the value not the name
+
+          */
+
           if (tree["type"] === "NUMBER") {
             _element = (
               <NestedComponent text={tree["value"]} children={element} />
             );
           }
-          console.log(
-            "---------------------------- new iteration ----------------------------"
-          );
+
+          /*
+
+            If there is a left side, we need to recursively call the function again
+            and slot it into the display first
+
+          */
+
           if (tree["left"]) {
-            console.log("SHIFTING LEFT");
-            console.log("final array: ", final_array_of_elements);
             final_array_of_elements.push(
               <>
                 {_iterate(tree.left, <></>)}
@@ -57,28 +66,73 @@ const Visualizer: React.FC = () => {
               </>
             );
           }
+
+          /*
+
+            The right follows the left, and should be prepended by the symbol (done above)
+
+          */
+
           if (tree["right"]) {
             // operator
-            console.log("SHIFTING RIGHT");
-            final_array_of_elements.push(_iterate(tree.right, <></>));
+            if (tree["name"]) {
+              final_array_of_elements.push(
+              <S.SubContainer>
+                {tree["name"]}
+                {_iterate(tree.right, <></>)}
+              </S.SubContainer>
+              )
+            } else {
+              final_array_of_elements.push(_iterate(tree.right, <></>));
+            }
           }
 
+          /*
+
+            The arguments are of type array, and should be iterated through
+            with recursive calls to the function, in order
+
+          */
+
+
           if (tree.arguments) {
+            if (tree["name"]) {
+              final_array_of_elements.push(<NestedComponent text={tree["name"]} children={element} />)
+            }
             tree.arguments.forEach((el: any, _: number) => {
               final_array_of_elements.push(_iterate(el, <></>));
             });
           }
 
+          /*
+
+            Return the formatted and copied jsx element
+
+          */
+
           return _element;
         };
 
-        // If left or right make array
+        /*
+        
+          If there is a top level left and right, we want to place them in order
+          around the symbol. To achieve this we use a different initial 
+          display than if there isn't a top level left and right
+
+        */ 
+
         if (tree.left | tree.right) {
           final_array_of_elements.push(symbolMap[tree["value"]]);
           final_array_of_elements.unshift(_iterate(tree.left, <></>));
           final_array_of_elements.push(_iterate(tree.right, <></>));
         } else {
-          // If not handle arguments
+          /*
+
+            There is not a top level split, so we want to prepend the while 
+            formula with the initial function
+
+          */
+
           final_array_of_elements.push(<>{tree["name"]}</>);
           if (tree["arguments"]) {
             tree["arguments"].forEach((el: any) => {

@@ -3,7 +3,7 @@ import * as S from "./styledComponents.styled";
 
 type NestedComponentProps = {
   children: any;
-  text: string;
+  text?: string;
 };
 
 const NestedComponent: React.FC<NestedComponentProps> = ({
