@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import './App.css';
-import * as Parser from './parser/formula-parser';
-import { CalculatorBody } from './calculator';
-import styled from "styled-components"
+import { useState } from "react";
+import "./App.css";
+import * as Parser from "./parser/formula-parser";
+import { CalculatorBody } from "./calculator";
+import styled from "styled-components";
 const parse = Parser.parse;
 
-const App: React.FC = () =>{
-  let [formula, setFormula] = useState('($b + SQRT (SQR($b) - 4 * $a)) / (2 * $a)');
-  let [syntaxTree, syntaxTreeChange] = useState('');
+const App: React.FC = () => {
+  let [formula, setFormula] = useState(
+    "($b + SQRT (SQR($b) - 4 * $a)) / (2 * $a)"
+  );
+  let [syntaxTree, syntaxTreeChange] = useState("");
   let [syntaxTreeJson, syntaxTreeJsonChange] = useState<any>(null);
   let [displayVisualizer, setDisplayVisualizer] = useState(false);
 
@@ -15,11 +17,11 @@ const App: React.FC = () =>{
     const newSyntaxTree = parse(formula);
     syntaxTreeChange(newSyntaxTree);
 
-    const syntaxTree = JSON.stringify(newSyntaxTree, null, 2)
+    const syntaxTree = JSON.stringify(newSyntaxTree, null, 2);
     syntaxTreeJsonChange(syntaxTree);
   };
 
-  const convertAstToFormula = () => {     
+  const convertAstToFormula = () => {
     setDisplayVisualizer(() => !displayVisualizer);
   };
 
@@ -28,10 +30,10 @@ const App: React.FC = () =>{
     //   <h1>Welcome to the formulizer!</h1>
     //   <h3>Input formula</h3>
     //   <p>
-    //     <textarea 
-    //       cols={100} 
-    //       rows={8} 
-    //       value={formula} 
+    //     <textarea
+    //       cols={100}
+    //       rows={8}
+    //       value={formula}
     //       onChange={(event) => setFormula(event.target.value)}/> <br/>
     //   </p>
     //   <p><button onClick={updateAst}>Parse and update AST View</button></p>
@@ -43,10 +45,8 @@ const App: React.FC = () =>{
     <Container>
       <CalculatorBody />
     </Container>
-    
-
   );
-}
+};
 
 const Container = styled.div`
   position: absolute;
@@ -59,6 +59,5 @@ const Container = styled.div`
   width: 100vw;
   background-color: #222831;
 `;
-
 
 export default App;
