@@ -15,9 +15,9 @@ export const SubContainer = styled.div`
   justify-content: center;
   border-radius: 5px;
   :hover {
-    background-color: #CC3D3D;
+    background-color: #cc3d3d;
     color: white;
-    transition: .6s;
+    transition: 0.6s;
     cursor: pointer;
   }
 `;
@@ -33,7 +33,6 @@ export const OuterContainer = styled.div`
   justify-content: center;
   border-radius: 5px;
 `;
-
 
 export const Operator = styled.div`
   display: flex;

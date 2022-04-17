@@ -16,15 +16,15 @@ const Visualizer: React.FC = () => {
   const wrappedElements = useMemo(() => {
     if (tree) {
       const traverse = (tree: any) => {
-        const tracking_map: any = {}
+        const tracking_map: any = {};
         const final_array_of_elements: any = [];
 
         const _iterate = (tree: any, element: any): any => {
           let _element = element;
           if (tracking_map[tree.type]) {
-            tracking_map[tree.type] += 1
+            tracking_map[tree.type] += 1;
           } else {
-            tracking_map[tree.type] = 1
+            tracking_map[tree.type] = 1;
           }
 
           /*
@@ -35,7 +35,12 @@ const Visualizer: React.FC = () => {
           */
           if (tree["name"] && tree["type"] === "VARIABLE") {
             _element = (
-              <NestedComponent text={tree["name"]} children={element} node={tree} map={tracking_map}/>
+              <NestedComponent
+                text={tree["name"]}
+                children={element}
+                node={tree}
+                map={tracking_map}
+              />
             );
           }
 
@@ -47,13 +52,23 @@ const Visualizer: React.FC = () => {
 
           if (tree["type"] === "NUMBER") {
             _element = (
-              <NestedComponent text={tree["value"]} children={element} node={tree} map={tracking_map}/>
+              <NestedComponent
+                text={tree["value"]}
+                children={element}
+                node={tree}
+                map={tracking_map}
+              />
             );
           }
 
           if (tree["type"] === "PI") {
             _element = (
-              <NestedComponent text={tree["type"]} children={element} node={tree} map={tracking_map}/>
+              <NestedComponent
+                text={tree["type"]}
+                children={element}
+                node={tree}
+                map={tracking_map}
+              />
             );
           }
 
@@ -66,7 +81,14 @@ const Visualizer: React.FC = () => {
 
           if (tree["left"]) {
             final_array_of_elements.push(
-              <NestedComponent children={[_iterate(tree.left, element), symbolMap[tree["type"]]]} node={tree} map={tracking_map}/>
+              <NestedComponent
+                children={[
+                  _iterate(tree.left, element),
+                  symbolMap[tree["type"]],
+                ]}
+                node={tree}
+                map={tracking_map}
+              />
             );
           }
 
@@ -80,12 +102,20 @@ const Visualizer: React.FC = () => {
             // operator
             if (tree["name"]) {
               final_array_of_elements.push(
-                <NestedComponent children={[_iterate(tree.right, element), tree["name"]]} node={tree} map={tracking_map}/>
-              )
+                <NestedComponent
+                  children={[_iterate(tree.right, element), tree["name"]]}
+                  node={tree}
+                  map={tracking_map}
+                />
+              );
             } else {
               final_array_of_elements.push(
-                <NestedComponent children={_iterate(tree.right, element)} node={tree} map={tracking_map}/>
-              )
+                <NestedComponent
+                  children={_iterate(tree.right, element)}
+                  node={tree}
+                  map={tracking_map}
+                />
+              );
             }
           }
 
@@ -96,14 +126,20 @@ const Visualizer: React.FC = () => {
 
           */
 
-
           if (tree.arguments) {
             if (tree["name"]) {
-              final_array_of_elements.push(<NestedComponent text={tree["name"]} children={element} node={tree} map={tracking_map}/>)
-            } 
+              final_array_of_elements.push(
+                <NestedComponent
+                  text={tree["name"]}
+                  children={element}
+                  node={tree}
+                  map={tracking_map}
+                />
+              );
+            }
             tree.arguments.forEach((args: any) => {
               final_array_of_elements.push(_iterate(args, <></>));
-            })
+            });
           }
 
           /*
@@ -121,7 +157,7 @@ const Visualizer: React.FC = () => {
           around the symbol. To achieve this, use a different initial 
           display than if there isn't a top level left and right
 
-        */ 
+        */
 
         if (tree["left"] || tree["right"]) {
           final_array_of_elements.unshift(_iterate(tree.left, <></>));
@@ -137,9 +173,11 @@ const Visualizer: React.FC = () => {
 
           final_array_of_elements.push(<>{tree["name"]}</>);
           if (tree["arguments"]) {
-            final_array_of_elements.push(tree["arguments"].map((el: any) => {
-              return _iterate(el, <></>);
-            }));
+            final_array_of_elements.push(
+              tree["arguments"].map((el: any) => {
+                return _iterate(el, <></>);
+              })
+            );
           }
         }
         return final_array_of_elements;
@@ -151,9 +189,11 @@ const Visualizer: React.FC = () => {
   }, [stringTree]);
 
   return (
-    wrappedElements.length && <S.Container>
-      <S.OuterContainer>{wrappedElements}</S.OuterContainer>
-    </S.Container>
+    wrappedElements.length && (
+      <S.Container>
+        <S.OuterContainer>{wrappedElements}</S.OuterContainer>
+      </S.Container>
+    )
   );
 };
 
