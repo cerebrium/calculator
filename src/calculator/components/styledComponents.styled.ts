@@ -30,7 +30,7 @@ export const Button = styled.button`
     background-color: #222831;
     color: #EEEEEE;
     font-size: 20px;
-    text-align: left;
+    text-align: center;
     padding: 10px;
     margin: 10px;
     :hover {

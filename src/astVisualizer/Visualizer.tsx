@@ -11,20 +11,25 @@ const symbolMap: any = {
 };
 
 const Visualizer: React.FC = () => {
-  const [trigger, { tree }] = useTreeProvider();
+  const [trigger, { tree, stringTree }] = useTreeProvider();
   /*
-        Subdivide tree
-        Wrap each in an outline
-        SQRT(SQR($b)-4*$a)
-    */
+    PI*SQRT(SQR($b)-SQRT(4*$a))
+  */
 
   const wrappedElements = useMemo(() => {
     if (tree) {
+      // console.log("tree changed: ", stringTree);
       const traverse = (tree: any) => {
+        const tracking_map: any = {}
         let final_array_of_elements: any = [];
 
         const _iterate = (tree: any, element: any): any => {
           let _element = element;
+          if (tracking_map[tree.type]) {
+            tracking_map[tree.type] += 1
+          } else {
+            tracking_map[tree.type] = 1
+          }
 
           /*
 
@@ -33,9 +38,8 @@ const Visualizer: React.FC = () => {
 
           */
           if (tree["name"] && tree["type"] === "VARIABLE") {
-
             _element = (
-              <NestedComponent text={tree["name"]} children={element} />
+              <NestedComponent text={tree["name"]} children={element} node={tree} map={tracking_map}/>
             );
           }
 
@@ -47,7 +51,13 @@ const Visualizer: React.FC = () => {
 
           if (tree["type"] === "NUMBER") {
             _element = (
-              <NestedComponent text={tree["value"]} children={element} />
+              <NestedComponent text={tree["value"]} children={element} node={tree} map={tracking_map}/>
+            );
+          }
+
+          if (tree["type"] === "PI") {
+            _element = (
+              <NestedComponent text={tree["type"]} children={element} node={tree} map={tracking_map}/>
             );
           }
 
@@ -60,10 +70,7 @@ const Visualizer: React.FC = () => {
 
           if (tree["left"]) {
             final_array_of_elements.push(
-              <>
-                {_iterate(tree.left, <></>)}
-                {symbolMap[tree["type"]]}
-              </>
+              <NestedComponent children={[_iterate(tree.left, element), symbolMap[tree["type"]]]} node={tree} map={tracking_map}/>
             );
           }
 
@@ -77,13 +84,12 @@ const Visualizer: React.FC = () => {
             // operator
             if (tree["name"]) {
               final_array_of_elements.push(
-              <S.SubContainer>
-                {tree["name"]}
-                {_iterate(tree.right, <></>)}
-              </S.SubContainer>
+                <NestedComponent children={[_iterate(tree.right, element), tree["name"]]} node={tree} map={tracking_map}/>
               )
             } else {
-              final_array_of_elements.push(_iterate(tree.right, <></>));
+              final_array_of_elements.push(
+                <NestedComponent children={_iterate(tree.right, element)} node={tree} map={tracking_map}/>
+              )
             }
           }
 
@@ -97,11 +103,11 @@ const Visualizer: React.FC = () => {
 
           if (tree.arguments) {
             if (tree["name"]) {
-              final_array_of_elements.push(<NestedComponent text={tree["name"]} children={element} />)
-            }
-            tree.arguments.forEach((el: any, _: number) => {
-              final_array_of_elements.push(_iterate(el, <></>));
-            });
+              final_array_of_elements.push(<NestedComponent text={tree["name"]} children={element} node={tree} map={tracking_map}/>)
+            } 
+            tree.arguments.forEach((args: any) => {
+              final_array_of_elements.push(_iterate(args, <></>));
+            })
           }
 
           /*
@@ -121,37 +127,36 @@ const Visualizer: React.FC = () => {
 
         */ 
 
-        if (tree.left | tree.right) {
-          final_array_of_elements.push(symbolMap[tree["value"]]);
+        if (tree["left"] || tree["right"]) {
+          final_array_of_elements.push(symbolMap[tree["type"]]);
           final_array_of_elements.unshift(_iterate(tree.left, <></>));
           final_array_of_elements.push(_iterate(tree.right, <></>));
         } else {
           /*
 
-            There is not a top level split, so we want to prepend the while 
+            There is not a top level split, so we want to prepend the whole 
             formula with the initial function
 
           */
 
           final_array_of_elements.push(<>{tree["name"]}</>);
           if (tree["arguments"]) {
-            tree["arguments"].forEach((el: any) => {
-              final_array_of_elements.push(_iterate(el, <></>));
-            });
+            final_array_of_elements.push(tree["arguments"].map((el: any) => {
+              return _iterate(el, <></>);
+            }));
           }
         }
         return final_array_of_elements;
       };
-      const elements = traverse(tree);
-      return elements;
+      return traverse(tree);
     }
 
     return <></>;
-  }, [tree]);
+  }, [stringTree]);
 
   return (
-    <S.Container>
-      <S.SubContainer>{wrappedElements}</S.SubContainer>
+    wrappedElements.length && <S.Container>
+      <S.OuterContainer>{wrappedElements}</S.OuterContainer>
     </S.Container>
   );
 };

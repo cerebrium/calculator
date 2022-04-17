@@ -4,6 +4,7 @@ type TreeResult = [
   (tree: any) => void,
   {
     tree: any;
+    stringTree: string
   }
 ];
 
@@ -11,13 +12,18 @@ const TreeContext = React.createContext<TreeResult | undefined>(undefined);
 
 export const TreeParser: React.FC<any> = ({ children }) => {
   const [tree, setTree] = useState(null);
+  const [stringTree, setStringTree] = useState<string>('');
 
   const trigger = (tree: any) => {
+    setTree(null)
     setTree(tree);
+    const stringifiedTree = JSON.stringify(tree, null, 2);
+    console.log("trigger: ", stringifiedTree);
+    setStringTree(stringifiedTree);
   };
 
   return (
-    <TreeContext.Provider value={[trigger, { tree }]}>
+    <TreeContext.Provider value={[trigger, { tree, stringTree }]}>
       {children}
     </TreeContext.Provider>
   );

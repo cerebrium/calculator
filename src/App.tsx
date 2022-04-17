@@ -3,6 +3,7 @@ import "./App.css";
 import * as Parser from "./parser/formula-parser";
 import { CalculatorBody } from "./calculator";
 import styled from "styled-components";
+import { ToastContainer, toast } from "react-toastify";
 const parse = Parser.parse;
 
 const App: React.FC = () => {
@@ -14,11 +15,11 @@ const App: React.FC = () => {
   let [displayVisualizer, setDisplayVisualizer] = useState(false);
 
   const updateAst = () => {
-    const newSyntaxTree = parse(formula);
-    syntaxTreeChange(newSyntaxTree);
-
-    const syntaxTree = JSON.stringify(newSyntaxTree, null, 2);
-    syntaxTreeJsonChange(syntaxTree);
+      const newSyntaxTree = parse(formula);
+      syntaxTreeChange(newSyntaxTree);
+      
+      const syntaxTree = JSON.stringify(newSyntaxTree, null, 2);
+      syntaxTreeJsonChange(syntaxTree);
   };
 
   const convertAstToFormula = () => {
@@ -43,6 +44,7 @@ const App: React.FC = () => {
     //   {displayVisualizer && <Visualizer  />}
     // </div>
     <Container>
+
       <CalculatorBody />
     </Container>
   );

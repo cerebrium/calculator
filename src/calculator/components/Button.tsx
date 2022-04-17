@@ -8,7 +8,7 @@ type Props = {
 const Button: React.FC<Props> = ({handleClick}) => {
     return (
         <S.Button onClick={handleClick}>
-            View Formula
+            Visualize
         </S.Button>
     )
 }

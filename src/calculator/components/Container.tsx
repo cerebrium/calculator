@@ -7,7 +7,7 @@ const parse = Parser.parse;
 
 const Container: React.FC = () => {
   const [trigger, { tree }] = useTreeProvider();
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>("PI*SQRT(SQR($b)-SQRT(4*$a))");
 
   const handleClick = () => {
     const syntaxTree = parse(value);
