@@ -38,7 +38,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           reached_level += 1
           /* 
           
-            Have found the node we are looking for... ideally would delete the parent nodes 
+            Have found the node being looked for... ideally would delete the parent nodes 
             reference to this whole branch, however, deleting its children works. 
 
             I though for some time about making the references null instead of deleting them, 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import * as S from "./styledComponents.styled";
 import { useTreeProvider } from "../treeContext/context-provider";
 import { NestedComponent } from ".";
@@ -15,10 +15,9 @@ const Visualizer: React.FC = () => {
 
   const wrappedElements = useMemo(() => {
     if (tree) {
-      // console.log("tree changed: ", stringTree);
       const traverse = (tree: any) => {
         const tracking_map: any = {}
-        let final_array_of_elements: any = [];
+        const final_array_of_elements: any = [];
 
         const _iterate = (tree: any, element: any): any => {
           let _element = element;
@@ -42,7 +41,7 @@ const Visualizer: React.FC = () => {
 
           /*
 
-            If the type is number, we want the value not the name
+            If the type is number, return value not name
 
           */
 
@@ -60,7 +59,7 @@ const Visualizer: React.FC = () => {
 
           /*
 
-            If there is a left side, we need to recursively call the function again
+            If there is a left side, recursively call the function again
             and slot it into the display first
 
           */
@@ -118,20 +117,20 @@ const Visualizer: React.FC = () => {
 
         /*
         
-          If there is a top level left and right, we want to place them in order
-          around the symbol. To achieve this we use a different initial 
+          If there is a top level left and right, place them in order
+          around the symbol. To achieve this, use a different initial 
           display than if there isn't a top level left and right
 
         */ 
 
         if (tree["left"] || tree["right"]) {
-          final_array_of_elements.push(symbolMap[tree["type"]]);
           final_array_of_elements.unshift(_iterate(tree.left, <></>));
+          final_array_of_elements.push(symbolMap[tree["type"]]);
           final_array_of_elements.push(_iterate(tree.right, <></>));
         } else {
           /*
 
-            There is not a top level split, so we want to prepend the whole 
+            There is not a top level split, prepend the whole 
             formula with the initial function
 
           */

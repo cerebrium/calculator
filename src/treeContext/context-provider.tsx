@@ -15,10 +15,8 @@ export const TreeParser: React.FC<any> = ({ children }) => {
   const [stringTree, setStringTree] = useState<string>('');
 
   const trigger = (tree: any) => {
-    setTree(null)
     setTree(tree);
     const stringifiedTree = JSON.stringify(tree, null, 2);
-    console.log("trigger: ", stringifiedTree);
     setStringTree(stringifiedTree);
   };
 
@@ -33,7 +31,7 @@ export const useTreeProvider = () => {
   const context = useContext(TreeContext);
 
   if (context === undefined) {
-    throw new Error("useThemeProvider must be used in the TreeParser");
+    throw new Error("useTreeProvider must be used in the TreeParser");
   }
 
   return context;
