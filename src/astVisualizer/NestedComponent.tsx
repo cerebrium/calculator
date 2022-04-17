@@ -21,8 +21,10 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   const removeNode = (type: string, level: number) => {
     /*
 
-      iterate through, find the node, whilst keeping track of path
-      set node equal to null or delete from path
+      Recursively iterate through the tree to find matching node for removal.
+      Level is passed in that is generated in the visualizer component. Level
+      is meant to solve the duplication issue. There are some bugs in it though,
+      solving these would be a top priority. 
 
     */
     let new_tree = tree
@@ -34,13 +36,21 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
         if (tree.type === type) {
 
           reached_level += 1
+          /* 
+          
+            Have found the node we are looking for... ideally would delete the parent nodes 
+            reference to this whole branch, however, deleting its children works. 
+
+            I though for some time about making the references null instead of deleting them, 
+            should be slightly faster, but the appearance of a bunch of null references is 
+            judged to be worse than a slight performance hit, which should be negligible.
+
+          */ 
           if ((tree.name === text || tree.value === text || tree.type === text) && reached_level >= level) {
-            tree.name = null
-            tree.type = null
-            tree.left = null
-            tree.right = null
-            tree.value = null
-            tree.arguments = null
+            const keys = Object.keys(tree)
+            keys.forEach((key: string) => {
+              delete tree[key]
+            })
             
             return;
           }
@@ -53,7 +63,6 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
             _iterate(args, type, level)
           })
         }
-        
       }
       return;
     }

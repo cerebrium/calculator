@@ -39,3 +39,9 @@ export const Button = styled.button`
     }
     cursor: pointer;
 `;
+
+export const TreeVisualizer = styled.pre`
+    max-height: 500px;
+    overflow-y: auto;
+    width: 80%;
+`;

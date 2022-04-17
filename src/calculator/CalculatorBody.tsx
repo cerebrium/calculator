@@ -1,6 +1,6 @@
 import React from "react";
 import { Visualizer } from "../astVisualizer";
-import { TopSection } from "./components";
+import { TopSection, TreeVisualizer } from "./components";
 import * as S from "./styledComponents.styled";
 
 const CalculatorBody: React.FC = () => {
@@ -9,6 +9,7 @@ const CalculatorBody: React.FC = () => {
       <S.Header>Calculator</S.Header>
       <TopSection />
       <Visualizer />
+      <TreeVisualizer />
     </S.Container>
   );
 };

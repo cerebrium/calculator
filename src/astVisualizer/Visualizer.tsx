@@ -11,10 +11,7 @@ const symbolMap: any = {
 };
 
 const Visualizer: React.FC = () => {
-  const [trigger, { tree, stringTree }] = useTreeProvider();
-  /*
-    PI*SQRT(SQR($b)-SQRT(4*$a))
-  */
+  const [_, { tree, stringTree }] = useTreeProvider();
 
   const wrappedElements = useMemo(() => {
     if (tree) {
