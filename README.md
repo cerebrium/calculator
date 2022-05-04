@@ -19,10 +19,6 @@ and I would have to take a serious look at whether it was necessary.
 c. The file structure is not perfect. The names are non-ideal, it should be organized better. I 
 am mostly happy with the readability of each component themselves, but not happy about the 
 overall structure.
-d. The logic intensive parts could perhaps be factored out to their own files - If this was done, 
-with a heavily intensive formula using a webworker might be the way forward so there isn't any 
-blocking that occurs. - In a perfect world all of the expensive fe stuff would be factored out 
-into wasm called on another thread (shared web worker)
 </pre>
 <pre>
 2. How does this work?
@@ -45,17 +41,4 @@ into wasm called on another thread (shared web worker)
    e. To use it, press the visualize button, then to delete nodes click on the one in the display 
    that you wish to remove.
 </pre>
-<pre>
-3. Thoughts/Considerations
-   a. I did not copy any code from anywhere (perhaps if I had my highlighting would be better! :D).
-   b. I have not worked with AST's before, this was new, extremely interesting, and ultimately rewarding 
-   and fun! I fully intend to solve this completely in the future
-   c. I spent a bit more than the 3 hours. However, for the actual tree manipulation I would estimate 
-   I ended up around at that 3 hour mark. I spent (longer than I care to say!) getting the app into ts 
-   (I forgot to add a tsconfig), and just doing some random styling and playing with the background 
-   color. So, overall yes I spent more than the alloted time, but 'concentrated hours' dealing with 
-   the actual question, I would say I spent about the correct amount of time.
-   d. I deployed it here: https://celucalc.netlify.app/ Just for easy viewing. I can take it down if 
-   I am not meant to do this, just thought you might appreciate playing with it a little (find all my bugs!)
-   e. I sincerely hope that it is a decent attempt and not way below your other applicants and a waste of time!
-</pre>
+
